@@ -5,22 +5,24 @@
 
 http://www.parse.com/
 
-# TL;DR;
+# TL;DR
 
 ## Docker Compose
 
-```bash
+```console
 $ curl -sSL https://raw.githubusercontent.com/bitnami/bitnami-docker-parse-dashboard/master/docker-compose.yml > docker-compose.yml
 $ docker-compose up -d
 ```
+
+You can find the default credentials and available configuration options in the [Environment Variables](#environment-variables) section.
 
 # Why use Bitnami Images?
 
 * Bitnami closely tracks upstream source changes and promptly publishes new versions of this image using our automated systems.
 * With Bitnami images the latest bug fixes and features are available as soon as possible.
 * Bitnami containers, virtual machines and cloud images use the same components and configuration approach - making it easy to switch between formats based on your project needs.
-* All our images are based on [minideb](https://github.com/bitnami/minideb) a minimalist Debian based container image which gives you a small base container image and the familiarity of a leading linux distribution.
-* All Bitnami images available in Docker Hub are signed with [Docker Content Trust (DTC)](https://docs.docker.com/engine/security/trust/content_trust/). You can use `DOCKER_CONTENT_TRUST=1` to verify the integrity of the images.
+* All our images are based on [minideb](https://github.com/bitnami/minideb) a minimalist Debian based container image which gives you a small base container image and the familiarity of a leading Linux distribution.
+* All Bitnami images available in Docker Hub are signed with [Docker Content Trust (DCT)](https://docs.docker.com/engine/security/trust/content_trust/). You can use `DOCKER_CONTENT_TRUST=1` to verify the integrity of the images.
 * Bitnami container images are released daily with the latest distribution packages available.
 
 
@@ -28,18 +30,14 @@ $ docker-compose up -d
 
 # Why use a non-root container?
 
-Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://docs.bitnami.com/containers/how-to/work-with-non-root-containers/).
+Non-root container images add an extra layer of security and are generally recommended for production environments. However, because they run as a non-root user, privileged tasks are typically off-limits. Learn more about non-root containers [in our docs](https://docs.bitnami.com/tutorials/work-with-non-root-containers/).
 
 # Supported tags and respective `Dockerfile` links
 
-> NOTE: Debian 8 images have been deprecated in favor of Debian 9 images. Bitnami will not longer publish new Docker images based on Debian 8.
-
-Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/).
+Learn more about the Bitnami tagging policy and the difference between rolling tags and immutable tags [in our documentation page](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers/).
 
 
-* [`1-ol-7`, `1.4.1-ol-7-r5` (1/ol-7/Dockerfile)](https://github.com/bitnami/bitnami-docker-parse-dashboard/blob/1.4.1-ol-7-r5/1/ol-7/Dockerfile)
-* [`1-debian-9`, `1.4.1-debian-9-r5`, `1`, `1.4.1`, `1.4.1-r5`, `latest` (1/debian-9/Dockerfile)](https://github.com/bitnami/bitnami-docker-parse-dashboard/blob/1.4.1-debian-9-r5/1/debian-9/Dockerfile)
-* [`1-rhel-7`, `1.3.0-rhel-7-r8` (1/rhel-7/Dockerfile)](https://github.com/bitnami/bitnami-docker-parse-dashboard/blob/1.3.0-rhel-7-r8/1/rhel-7/Dockerfile)
+* [`2`, `2-debian-10`, `2.1.0`, `2.1.0-debian-10-r411`, `latest` (2/debian-10/Dockerfile)](https://github.com/bitnami/bitnami-docker-parse-dashboard/blob/2.1.0-debian-10-r411/2/debian-10/Dockerfile)
 
 Subscribe to project updates by watching the [bitnami/parse-dashboard GitHub repo](https://github.com/bitnami/bitnami-docker-parse-dashboard).
 
@@ -53,10 +51,10 @@ To run this application you need Docker Engine 1.10.0. Docker Compose is recomen
 
 The main folder of this repository contains a functional [`docker-compose.yml`](https://github.com/bitnami/bitnami-docker-parse-dashboard/blob/master/docker-compose.yml) file. Run the application using it as shown below:
 
-```bash
+```console
 $ curl -sSL https://raw.githubusercontent.com/bitnami/bitnami-docker-parse-dashboard/master/docker-compose.yml > docker-compose.yml
 $ docker-compose up -d
-``` 
+```
 
 ### Run the application manually
 
@@ -64,13 +62,13 @@ If you want to run the application manually instead of using docker-compose, the
 
 1. Create a network for the application, Parse Server and the database:
 
-  ```bash
+  ```console
   $ docker network create parse_dashboard-tier
   ```
 
-2. Start a MongoDB database in the network generated:
+2. Start a MongoDB&reg; database in the network generated:
 
-  ```bash
+  ```console
   $ docker run -d --name mongodb --net=parse_dashboard-tier bitnami/mongodb
   ```
 
@@ -78,13 +76,13 @@ If you want to run the application manually instead of using docker-compose, the
 
 3. Start a Parse Server container:
 
-  ```bash
+  ```console
   $ docker run -d -p 1337:1337 --name parse --net=parse_dashboard-tier bitnami/parse
   ```
 
 4. Run the Parse Dashboard container:
 
-  ```bash
+  ```console
   $ docker run -d -p 80:4040 --name parse-dashboard --net=parse_dashboard-tier bitnami/parse-dashboard
   ```
 
@@ -94,7 +92,7 @@ Then you can access your application at http://your-ip/
 
 If you remove the container all your data and configurations will be lost, and the next time you run the image the database will be reinitialized. To avoid this loss of data, you should mount a volume that will persist even after the container is removed.
 
-For persistence you should mount a volume at the `/bitnami` path. Additionally you should mount a volume for the persistence of [MongoDB](https://github.com/bitnami/bitnami-docker-mongodb#persisting-your-database) and [Parse](https://github.com/bitnami/bitnami-docker-parse#persisting-your-application) data.
+For persistence you should mount a volume at the `/bitnami` path. Additionally you should mount a volume for the persistence of [MongoDB&reg;](https://github.com/bitnami/bitnami-docker-mongodb#persisting-your-database) and [Parse](https://github.com/bitnami/bitnami-docker-parse#persisting-your-application) data.
 
 The above examples define docker volumes namely `mongodb_data`, `parse_data` and `parse_dashboard_data`. The application state will persist as long as these volumes are not removed.
 
@@ -102,7 +100,7 @@ To avoid inadvertent removal of these volumes you can [mount host directories as
 
 ### Mount host directories as data volumes with Docker Compose
 
-This requires a minor change to the [`docker-compose.yml`](https://github.com/bitnami/bitnami-docker-parse-dashboard/blob/master/docker-compose.yml) file present in this repository: 
+This requires a minor change to the [`docker-compose.yml`](https://github.com/bitnami/bitnami-docker-parse-dashboard/blob/master/docker-compose.yml) file present in this repository:
 
 ```yaml
 services:
@@ -123,19 +121,21 @@ services:
   ...
 ```
 
+> NOTE: As this is a non-root container, the mounted files and directories must have the proper permissions for the UID `1001`.
+
 ### Mount host directories as data volumes using the Docker command line
 
 In this case you need to specify the directories to mount on the run command. The process is the same than the one previously shown:
 
 1. Create a network (if it does not exist):
 
-  ```bash
+  ```console
   $ docker network create parse_dashboard-tier
   ```
 
-2. Create a MongoDB container with host volume:
+2. Create a MongoDB&reg; container with host volume:
 
-  ```bash
+  ```console
   $ docker run -d --name mongodb \
     --net parse-dashboard-tier \
     --volume /path/to/mongodb-persistence:/bitnami \
@@ -146,7 +146,7 @@ In this case you need to specify the directories to mount on the run command. Th
 
 3. Start a Parse Server container:
 
-  ```bash
+  ```console
   $ docker run -d -name parse -p 1337:1337 \
     --net parse-dashboard-tier
     --volume /path/to/parse-persistence:/bitnami \
@@ -155,7 +155,7 @@ In this case you need to specify the directories to mount on the run command. Th
 
 4. Run the Parse Dashboard container:
 
-  ```bash
+  ```console
   $ docker run -d --name parse-dashboard -p 80:4040 \
   --volume /path/to/parse_dashboard-persistence:/bitnami \
   bitnami/parse-dashboard:latest
@@ -167,7 +167,7 @@ Bitnami provides up-to-date versions of Parse Dashboard, including security patc
 
 1. Get the updated images:
 
-```bash
+```console
 $ docker pull bitnami/parse-dashboard:latest
 ```
 
@@ -178,11 +178,11 @@ $ docker pull bitnami/parse-dashboard:latest
 
 3. Take a snapshot of the application state
 
-```bash
+```console
 $ rsync -a /path/to/parse-persistence /path/to/parse-persistence.bkp.$(date +%Y%m%d-%H.%M.%S)
 ```
 
-Additionally, snapshot the [MongoDB](https://github.com/bitnami/bitnami-docker-mongodb#step-2-stop-and-backup-the-currently-running-container) and [Parse server](https://github.com/bitnami/bitnami-docker-parse#step-2-stop-and-backup-the-currently-running-container) data.
+Additionally, snapshot the [MongoDB&reg;](https://github.com/bitnami/bitnami-docker-mongodb#step-2-stop-and-backup-the-currently-running-container) and [Parse server](https://github.com/bitnami/bitnami-docker-parse#step-2-stop-and-backup-the-currently-running-container) data.
 
 You can use these snapshots to restore the application state should the upgrade fail.
 
@@ -200,7 +200,7 @@ You can use these snapshots to restore the application state should the upgrade 
 
 ## Environment variables
 
-When you start the parse-dashboard image, you can adjust the configuration of the instance by passing one or more environment variables either on the docker-compose file or on the docker run command line. If you want to add a new environment variable:
+When you start the parse-dashboard image, you can adjust the configuration of the instance by passing one or more environment variables either on the docker-compose file or on the `docker run` command line. If you want to add a new environment variable:
 
  * For docker-compose add the variable name and value under the application section in the [`docker-compose.yml`](https://github.com/bitnami/bitnami-docker-parse-dashboard/blob/master/docker-compose.yml) file present in this repository:
 
@@ -215,20 +215,27 @@ parse-dashboard:
 
  * For manual execution add a `-e` option with each variable and value:
 
-```bash
+```console
  $ docker run -d -e PARSE_DASHBOARD_PASSWORD=my_password -p 80:4040 --name parse-dashboard -v /your/local/path/bitnami/parse_dashboard:/bitnami --network=parse_dashboard-tier bitnami/parse-dashboard
 ```
 
 Available variables:
  - `PARSE_DASHBOARD_USER`: Parse Dashboard application username. Default: **user**
  - `PARSE_DASHBOARD_PASSWORD`: Parse Dashboard application password. Default: **bitnami**
- - `PARSE_HOST`: This host is for Parse Dashboard knows how to form the urls to Parse Server.
+ - `PARSE_HOST`: Host used by Parse Dashboard to form the URLs to Parse Server.
+ - `PARSE_PROTOCOL`: Protocol used by Parse Dashboard to form the URLs to Parse Server. Default: **http**
+ - `PARSE_USE_HOSTNAME`: Whether to use a hostname or an IP to configure the "serverURL" setting. Default: **no**
  - `PARSE_PORT_NUMBER`: Parse Server Port. Default: **1337**
  - `PARSE_APP_ID`: Parse Server App Id. Default: **myappID**
  - `PARSE_MASTER_KEY`: Parse Server Master Key. Default: **mymasterKey**
  - `PARSE_DASHBOARD_APP_NAME`: Parse Dashboard application name. Default: **MyDashboard**
 
 # Notable Changes
+
+## 2.1.0-debian-10-r328
+
+- The size of the container image has been decreased.
+- The configuration logic is now based on Bash scripts in the *rootfs/* folder.
 
 ## 1.2.0-r69
 
@@ -240,7 +247,7 @@ We'd love for you to contribute to this container. You can request new features 
 
 # Issues
 
-If you encountered a problem running this container, you can file an [issue](https://github.com/bitnami/bitnami-docker-parse-dashboard/issues). For us to provide better support, be sure to include the following information in your issue:
+If you encountered a problem running this container, you can file an [issue](https://github.com/bitnami/bitnami-docker-parse-dashboard/issues/new). For us to provide better support, be sure to include the following information in your issue:
 
 - Host OS and version
 - Docker version (`docker version`)
@@ -250,7 +257,7 @@ If you encountered a problem running this container, you can file an [issue](htt
 
 # License
 
-Copyright 2016-2019 Bitnami
+Copyright 2016-2021 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
